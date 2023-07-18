@@ -1,4 +1,5 @@
 using BuberBreakfast.ServiceErrors;
+using BuberBreakfast.Contracts.Breakfast;
 using ErrorOr;
 
 namespace BuberBreakfast.Models;
@@ -9,8 +10,6 @@ public class Breakfast
     public const int MaxNameLength = 50;
     public const int MinDescriptionLength = 50;
     public const int MaxDescriptionLength = 150;
-
-
 
     public Guid Id { get; }
     public string Name { get; }
@@ -78,6 +77,31 @@ public class Breakfast
             DateTime.UtcNow,
             savory,
             sweet
+        );
+    }
+
+    public static ErrorOr<Breakfast> From(CreateBreakfastRequest request)
+     {
+        return Create(
+            request.Name,
+            request.Description,
+            request.StartDateTime,
+            request.EndDateTime,
+            request.Savory,
+            request.Sweet
+        );
+    }
+
+    public static ErrorOr<Breakfast> From(Guid id, UpsertBreakfastRequest request)
+    {
+        return Create(
+            request.Name,
+            request.Description,
+            request.StartDateTime,
+            request.EndDateTime,
+            request.Savory,
+            request.Sweet,
+            id  
         );
     }
 }

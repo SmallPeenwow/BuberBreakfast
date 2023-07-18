@@ -1,6 +1,5 @@
 using BuberBreakfast.Contracts.Breakfast;
 using BuberBreakfast.Models;
-using BuberBreakfast.ServiceErrors;
 using BuberBreakfast.Services.Breakfasts;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +18,7 @@ public class BreakfastController : ApiController
     [HttpPost]
     public IActionResult CreateBreakfast(CreateBreakfastRequest request)
     {
-        ErrorOr<Breakfast> requestToBreakfastResult = Breakfast.Create(
-            request.Name,
-            request.Description,
-            request.StartDateTime,
-            request.EndDateTime,
-            request.Savory,
-            request.Sweet
-        );
+        ErrorOr<Breakfast> requestToBreakfastResult = Breakfast.From(request);
 
         if (requestToBreakfastResult.IsError)
         {
@@ -57,15 +49,7 @@ public class BreakfastController : ApiController
     [HttpPut("{id:guid}")]
     public IActionResult UpsertBreakfast(Guid id, UpsertBreakfastRequest request)
     {
-        ErrorOr<Breakfast> requestToBreakfastResult = Breakfast.Create(
-            request.Name,
-            request.Description,
-            request.StartDateTime,
-            request.EndDateTime,
-            request.Savory,
-            request.Sweet,
-            id
-        );
+        ErrorOr<Breakfast> requestToBreakfastResult = Breakfast.From(id, request);
 
         if (requestToBreakfastResult.IsError)
         {
